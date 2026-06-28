@@ -51,6 +51,14 @@ export const AppProvider = ({ children }) => {
   // Cart Side-Drawer Toggle State
   const [cartDrawerOpen, setCartDrawerOpen] = useState(false);
 
+  const [checkoutAddress, setCheckoutAddress] = useState({
+    fullName: '',
+    phone: '',
+    streetAddress: '',
+    city: '',
+    zipCode: ''
+  });
+
 
   const setDeliveryLocation = (loc) => {
     setDeliveryLocationState(loc);
@@ -477,7 +485,8 @@ export const AppProvider = ({ children }) => {
       activeSort, setActiveSort,
       deliveryLocation, setDeliveryLocation,
       showLocationModal, setShowLocationModal,
-      cartDrawerOpen, setCartDrawerOpen
+      cartDrawerOpen, setCartDrawerOpen,
+      checkoutAddress, setCheckoutAddress
     }}>
 
       {children}
