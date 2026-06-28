@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
-import { ArrowLeft, CheckCircle, Package, Calendar, Phone, MapPin, Truck, Landmark } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Package, Calendar, Phone, MapPin, Truck, Landmark, CreditCard, Smartphone, Coins } from 'lucide-react';
 import styles from './Checkout.module.css';
 
 const Checkout = () => {
@@ -15,6 +15,9 @@ const Checkout = () => {
     city: '',
     zipCode: ''
   });
+
+  const [paymentMethod, setPaymentMethod] = useState('card'); // 'card', 'upi', 'cod'
+  const [upiId, setUpiId] = useState('');
 
   const [card, setCard] = useState({
     number: '',
@@ -64,15 +67,21 @@ const Checkout = () => {
     if (!address.city.trim()) errors.city = 'City is required';
     if (!address.zipCode.trim()) errors.zipCode = 'ZIP Code is required';
     
-    // Simulate simple card validation
-    if (!card.number.trim() || card.number.replace(/\s/g, '').length < 16) {
-      errors.cardNumber = 'Invalid Card Number (16 digits required)';
-    }
-    if (!card.expiry.trim() || !card.expiry.includes('/')) {
-      errors.cardExpiry = 'Expiry date required (MM/YY)';
-    }
-    if (!card.cvv.trim() || card.cvv.length < 3) {
-      errors.cardCvv = 'Invalid CVV';
+    if (paymentMethod === 'card') {
+      // Simulate simple card validation
+      if (!card.number.trim() || card.number.replace(/\s/g, '').length < 16) {
+        errors.cardNumber = 'Invalid Card Number (16 digits required)';
+      }
+      if (!card.expiry.trim() || !card.expiry.includes('/')) {
+        errors.cardExpiry = 'Expiry date required (MM/YY)';
+      }
+      if (!card.cvv.trim() || card.cvv.length < 3) {
+        errors.cardCvv = 'Invalid CVV';
+      }
+    } else if (paymentMethod === 'upi') {
+      if (!upiId.trim() || !upiId.includes('@')) {
+        errors.upiId = 'Invalid UPI ID (e.g. mobile@paytm, user@okaxis)';
+      }
     }
 
     setFormErrors(errors);
@@ -85,7 +94,12 @@ const Checkout = () => {
 
     setLoading(true);
     const shippingString = `${address.fullName}, Phone: ${address.phone}, Address: ${address.streetAddress}, ${address.city} - ${address.zipCode}`;
-    const result = await placeOrder(shippingString, 'Card');
+    
+    let displayMethod = 'Card';
+    if (paymentMethod === 'upi') displayMethod = 'UPI';
+    if (paymentMethod === 'cod') displayMethod = 'Cash on Delivery';
+
+    const result = await placeOrder(shippingString, displayMethod);
     setLoading(false);
 
     if (result.success) {
@@ -94,6 +108,7 @@ const Checkout = () => {
       alert(`Order placement failed: ${result.message}`);
     }
   };
+
 
   // If order was successfully placed, display premium receipt screen
   if (orderSuccess) {
@@ -127,6 +142,10 @@ const Checkout = () => {
             <div>
               <h3><MapPin size={16} /> Delivery Address</h3>
               <p>{orderSuccess.shippingAddress}</p>
+            </div>
+            <div>
+              <h3><Landmark size={16} /> Payment Method</h3>
+              <p style={{ fontWeight: '700', color: 'var(--text-primary)' }}>{orderSuccess.paymentMethod}</p>
             </div>
             <div>
               <h3><Truck size={16} /> Order Status</h3>
@@ -264,51 +283,112 @@ const Checkout = () => {
 
           {/* Payment Section */}
           <div className={`${styles.sectionCard} card`}>
-            <h2 className={styles.sectionTitle}><Landmark size={20} /> Payment Details (Simulated)</h2>
+            <h2 className={styles.sectionTitle}><Landmark size={20} /> Payment Method (Simulated)</h2>
             <hr className={styles.divider} />
 
-            <div className="form-group">
-              <label className="form-label">Credit Card Number</label>
-              <input 
-                type="text" 
-                name="number"
-                value={card.number} 
-                onChange={(e) => handleInputChange(e, 'card')}
-                className="form-control"
-                placeholder="xxxx xxxx xxxx xxxx"
-                maxLength="19"
-              />
-              {formErrors.cardNumber && <span className={styles.errMessage}>{formErrors.cardNumber}</span>}
+            {/* Payment Method Selector Tabs */}
+            <div className={styles.paymentTabs}>
+              <button 
+                type="button" 
+                onClick={() => setPaymentMethod('card')} 
+                className={`${styles.paymentTabBtn} ${paymentMethod === 'card' ? styles.paymentTabBtnActive : ''}`}
+              >
+                <CreditCard size={20} />
+                <span>Credit/Debit Card</span>
+              </button>
+              <button 
+                type="button" 
+                onClick={() => setPaymentMethod('upi')} 
+                className={`${styles.paymentTabBtn} ${paymentMethod === 'upi' ? styles.paymentTabBtnActive : ''}`}
+              >
+                <Smartphone size={20} />
+                <span>UPI ID</span>
+              </button>
+              <button 
+                type="button" 
+                onClick={() => setPaymentMethod('cod')} 
+                className={`${styles.paymentTabBtn} ${paymentMethod === 'cod' ? styles.paymentTabBtnActive : ''}`}
+              >
+                <Coins size={20} />
+                <span>Cash on Delivery</span>
+              </button>
             </div>
 
-            <div className={styles.formRow}>
-              <div className="form-group">
-                <label className="form-label">Expiry Date</label>
-                <input 
-                  type="text" 
-                  name="expiry"
-                  value={card.expiry} 
-                  onChange={(e) => handleInputChange(e, 'card')}
-                  className="form-control"
-                  placeholder="MM/YY"
-                  maxLength="5"
-                />
-                {formErrors.cardExpiry && <span className={styles.errMessage}>{formErrors.cardExpiry}</span>}
+            {/* Conditional Input Rendering */}
+            {paymentMethod === 'card' && (
+              <div className="animate-fade-in">
+                <div className="form-group">
+                  <label className="form-label">Credit Card Number</label>
+                  <input 
+                    type="text" 
+                    name="number"
+                    value={card.number} 
+                    onChange={(e) => handleInputChange(e, 'card')}
+                    className="form-control"
+                    placeholder="xxxx xxxx xxxx xxxx"
+                    maxLength="19"
+                  />
+                  {formErrors.cardNumber && <span className={styles.errMessage}>{formErrors.cardNumber}</span>}
+                </div>
+
+                <div className={styles.formRow}>
+                  <div className="form-group">
+                    <label className="form-label">Expiry Date</label>
+                    <input 
+                      type="text" 
+                      name="expiry"
+                      value={card.expiry} 
+                      onChange={(e) => handleInputChange(e, 'card')}
+                      className="form-control"
+                      placeholder="MM/YY"
+                      maxLength="5"
+                    />
+                    {formErrors.cardExpiry && <span className={styles.errMessage}>{formErrors.cardExpiry}</span>}
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">CVV</label>
+                    <input 
+                      type="password" 
+                      name="cvv"
+                      value={card.cvv} 
+                      onChange={(e) => handleInputChange(e, 'card')}
+                      className="form-control"
+                      placeholder="***"
+                      maxLength="4"
+                    />
+                    {formErrors.cardCvv && <span className={styles.errMessage}>{formErrors.cardCvv}</span>}
+                  </div>
+                </div>
               </div>
-              <div className="form-group">
-                <label className="form-label">CVV</label>
-                <input 
-                  type="password" 
-                  name="cvv"
-                  value={card.cvv} 
-                  onChange={(e) => handleInputChange(e, 'card')}
-                  className="form-control"
-                  placeholder="***"
-                  maxLength="4"
-                />
-                {formErrors.cardCvv && <span className={styles.errMessage}>{formErrors.cardCvv}</span>}
+            )}
+
+            {paymentMethod === 'upi' && (
+              <div className={`${styles.upiSection} animate-fade-in`}>
+                <div className="form-group">
+                  <label className="form-label">Enter UPI ID</label>
+                  <input 
+                    type="text" 
+                    value={upiId} 
+                    onChange={(e) => setUpiId(e.target.value)}
+                    className="form-control"
+                    placeholder="e.g. mobile@paytm or username@okaxis"
+                  />
+                  {formErrors.upiId && <span className={styles.errMessage}>{formErrors.upiId}</span>}
+                </div>
+                <p className={styles.upiInfo}>
+                  💡 Please keep your UPI app open on your mobile device. We will send a payment notification link once you place the order.
+                </p>
               </div>
-            </div>
+            )}
+
+            {paymentMethod === 'cod' && (
+              <div className={`${styles.codSection} animate-fade-in`}>
+                <h4 className={styles.codTitle}>🎉 Cash on Delivery Selected</h4>
+                <p className={styles.codDesc}>
+                  You can pay with Cash, UPI, or Cards directly to our delivery partner when your fresh groceries reach your doorstep. No advance payment required!
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
