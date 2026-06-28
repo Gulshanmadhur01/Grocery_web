@@ -120,6 +120,35 @@ const Home = () => {
         )}
       </section>
 
+      {/* Category-grouped Showcases (Same layout as Deals) */}
+      {!loading && categories.map((cat) => {
+        const catProducts = products.filter(p => p.category === cat.slug).slice(0, 4);
+        if (catProducts.length === 0) return null;
+        
+        return (
+          <section key={cat.id} className={`${styles.dealsSection} container animate-fade-in`}>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>{cat.name}</h2>
+              <Link 
+                to={`/categories?category=${cat.slug}`} 
+                className={styles.viewAllLink}
+                onClick={() => {
+                  setActiveCategory(cat.slug);
+                  setSearchQuery('');
+                }}
+              >
+                See all <ArrowRight size={14} />
+              </Link>
+            </div>
+            <div className={styles.productsGrid}>
+              {catProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </section>
+        );
+      })}
+
       {/* 4. What Our Customers Say (Testimonials) */}
       <section className={`${styles.testimonialsSection} container`}>
         <div className={styles.sectionHeaderCentered}>
