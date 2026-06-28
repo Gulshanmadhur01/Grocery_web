@@ -4,6 +4,17 @@ import { AppContext } from '../context/AppContext';
 import { ArrowLeft, Landmark, CreditCard, Smartphone, Coins, CheckCircle, MapPin, Truck } from 'lucide-react';
 import styles from './Checkout.module.css'; // Reuse Checkout module CSS directly!
 
+// Helper to dynamically load external scripts (Razorpay SDK)
+const loadScript = (src) => {
+  return new Promise((resolve) => {
+    const script = document.createElement('script');
+    script.src = src;
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+};
+
 const Payment = () => {
   const { cart, cartSubtotal, checkoutAddress, placeOrder } = useContext(AppContext);
   const navigate = useNavigate();
@@ -64,17 +75,76 @@ const Payment = () => {
     setLoading(true);
     const shippingString = `${checkoutAddress.fullName}, Phone: ${checkoutAddress.phone}, Address: ${checkoutAddress.streetAddress}, ${checkoutAddress.city} - ${checkoutAddress.zipCode}`;
     
-    let displayMethod = 'Card';
-    if (paymentMethod === 'upi') displayMethod = 'UPI';
-    if (paymentMethod === 'cod') displayMethod = 'Cash on Delivery';
-
-    const result = await placeOrder(shippingString, displayMethod);
-    setLoading(false);
-
-    if (result.success) {
-      setOrderSuccess(result.order);
+    if (paymentMethod === 'cod') {
+      // Cash on Delivery - Instant Placement
+      const result = await placeOrder(shippingString, 'Cash on Delivery');
+      setLoading(false);
+      if (result.success) {
+        setOrderSuccess(result.order);
+      } else {
+        alert(`Order placement failed: ${result.message}`);
+      }
     } else {
-      alert(`Order placement failed: ${result.message}`);
+      // Card / UPI - Launch Razorpay Interactive Test Payment Gateway
+      const src = 'https://checkout.razorpay.com/v1/checkout.js';
+      const loaded = await loadScript(src);
+      if (!loaded) {
+        alert('Razorpay Checkout failed to load. Please check your network connection.');
+        setLoading(false);
+        return;
+      }
+
+      const options = {
+        key: 'rzp_test_public_sandbox_key', // Dummy sandbox key to initialize checkout window
+        amount: Math.round(grandTotal * 100), // in paise
+        currency: 'INR',
+        name: 'FreshMart Checkout',
+        description: 'Secure Payment Gateway (Test Mode)',
+        image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=80&h=80&fit=crop',
+        handler: async function (response) {
+          const paymentId = response.razorpay_payment_id;
+          const displayMethod = paymentMethod === 'upi' ? `UPI (${upiId})` : 'Card';
+          const result = await placeOrder(shippingString, `${displayMethod} - Razorpay ID: ${paymentId}`);
+          setLoading(false);
+          if (result.success) {
+            setOrderSuccess(result.order);
+          } else {
+            alert(`Order placement failed: ${result.message}`);
+          }
+        },
+        prefill: {
+          name: checkoutAddress.fullName,
+          contact: checkoutAddress.phone,
+          email: 'customer@freshmart.com'
+        },
+        notes: {
+          address: shippingString
+        },
+        theme: {
+          color: '#10b981' // Organic green brand header color
+        },
+        modal: {
+          ondismiss: function () {
+            setLoading(false);
+          }
+        }
+      };
+
+      try {
+        const paymentObject = new window.Razorpay(options);
+        paymentObject.open();
+      } catch (err) {
+        console.error('Razorpay Modal error:', err);
+        alert('Razorpay simulation failed. Placing order in offline mode...');
+        const displayMethod = paymentMethod === 'upi' ? `UPI (${upiId})` : 'Card';
+        const result = await placeOrder(shippingString, `${displayMethod} (Simulated)`);
+        setLoading(false);
+        if (result.success) {
+          setOrderSuccess(result.order);
+        } else {
+          alert(`Order placement failed: ${result.message}`);
+        }
+      }
     }
   };
 
