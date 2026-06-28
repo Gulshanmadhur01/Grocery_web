@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc" />
+      <stop offset="100%" stop-color="#f1f5f9" />
+    </linearGradient>
+    <linearGradient id="bagGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <linearGradient id="appleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444" />
+      <stop offset="100%" stop-color="#b91c1c" />
+    </linearGradient>
+    <filter id="dropShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.05" />
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="url(#bgGrad)" rx="16" />
+  
+  <!-- Outer decorative circles -->
+  <circle cx="250" cy="220" r="120" fill="#e2e8f0" opacity="0.4" />
+  <circle cx="250" cy="220" r="95" fill="#cbd5e1" opacity="0.3" />
+  
+  <g filter="url(#dropShadow)">
+    <!-- Grocery Bag / Basket -->
+    <path d="M190 200 h120 l-10 110 a15 15 0 0 1 -15 15 h-70 a15 15 0 0 1 -15 -15 z" fill="url(#bagGrad)" />
+    
+    <!-- Bag Handles -->
+    <path d="M220 200 v-25 a30 30 0 0 1 60 0 v25" fill="none" stroke="#047857" stroke-width="8" stroke-linecap="round" />
+    
+    <!-- Apple sticking out -->
+    <circle cx="225" cy="185" r="22" fill="url(#appleGrad)" />
+    <path d="M225 163 c0 -5 5 -10 10 -12" fill="none" stroke="#78350f" stroke-width="3" stroke-linecap="round" />
+    <path d="M233 151 c2 2 5 1 6 -2 c0 -3 -3 -4 -6 -2 z" fill="#15803d" />
+    
+    <!-- Leaf sticking out -->
+    <path d="M275 180 c-10 -15 -25 -5 -25 15 c10 5 25 0 25 -15 z" fill="#22c55e" />
+    <path d="M250 195 q12 -12 25 -15" fill="none" stroke="#15803d" stroke-width="2" />
+  </g>
+  
+  <!-- Brand Text -->
+  <text x="250" y="380" font-family="system-ui, -apple-system, sans-serif" font-size="24" font-weight="800" fill="#0f172a" text-anchor="middle" letter-spacing="1">FreshMart</text>
+  <text x="250" y="410" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="500" fill="#64748b" text-anchor="middle">Quality Groceries</text>
+</svg>

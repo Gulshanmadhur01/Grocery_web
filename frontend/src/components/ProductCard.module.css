@@ -1,0 +1,144 @@
+.cardWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.cardWrapper:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary);
+}
+
+/* Wishlist Icon */
+.wishlistBtn {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.wishlistBtn:hover {
+  transform: scale(1.05);
+  border-color: var(--text-muted);
+}
+
+.heartOutline {
+  color: var(--text-muted);
+}
+
+.heartFilled {
+  color: var(--danger);
+}
+
+/* Image */
+.imageLink {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding-top: 75%; /* 4:3 ratio */
+  position: relative;
+  overflow: hidden;
+  background-color: white;
+}
+
+.productImage {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+  transition: transform 0.5s ease;
+}
+
+.cardWrapper:hover .productImage {
+  transform: scale(1.05);
+}
+
+/* Details */
+.details {
+  padding: 1rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+  height: 2.7rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.title a:hover {
+  color: var(--primary);
+}
+
+.pricing {
+  margin-bottom: 0.75rem;
+}
+
+.price {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+}
+
+/* Action button */
+.addBtn {
+  width: 100%;
+  padding: 0.55rem;
+  background-color: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: auto;
+  text-align: center;
+}
+
+.addBtn:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+.outOfStockBtn {
+  border-color: var(--border);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.outOfStockBtn:hover {
+  background-color: transparent;
+  color: var(--text-muted);
+}

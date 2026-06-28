@@ -1,0 +1,554 @@
+.homeWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4.5rem;
+  padding-bottom: 4rem;
+}
+
+/* 1. Hero Banner - Custom Premium Design */
+.hero {
+  padding-top: 2rem;
+}
+
+.heroCard {
+  background: linear-gradient(135deg, #0d381e 0%, #071f11 100%);
+  border-radius: var(--radius-lg);
+  padding: 4rem;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  align-items: center;
+  gap: 3.5rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(13, 56, 30, 0.15);
+}
+
+[data-theme='dark'] .heroCard {
+  background: linear-gradient(135deg, #082212 0%, #04120a 100%);
+  border: 1px solid #143520;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.heroContent {
+  animation: fadeIn 0.8s ease;
+  z-index: 5;
+}
+
+.heroTagline {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #A3E635;
+  padding: 0.45rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  border-radius: var(--radius-full);
+  margin-bottom: 1.5rem;
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(5px);
+}
+
+.heroTitle {
+  font-size: 3.5rem;
+  font-weight: 950;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+  color: #ffffff;
+  letter-spacing: -0.03em;
+}
+
+.heroTitleAccent {
+  color: #A3E635;
+}
+
+.heroDescription {
+  font-size: 1.15rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 2.25rem;
+  line-height: 1.6;
+  max-width: 480px;
+  font-weight: 500;
+}
+
+/* CTA Row */
+.heroCta {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.heroShopNowBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 2.25rem;
+  background-color: #A3E635;
+  color: #071f11;
+  font-size: 1.05rem;
+  font-weight: 800;
+  border-radius: var(--radius-full);
+  transition: var(--transition);
+  letter-spacing: -0.01em;
+  box-shadow: 0 6px 20px rgba(163, 230, 53, 0.25);
+  cursor: pointer;
+}
+
+.heroShopNowBtn:hover {
+  background-color: #ffffff;
+  color: #071f11;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(255, 255, 255, 0.3);
+}
+
+.heroDeliveryGuarantee {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.02em;
+}
+
+/* Showcase Column & Cards */
+.heroShowcaseColumn {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
+  position: relative;
+  z-index: 5;
+}
+
+.showcaseCard {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.showcaseTitle {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+  opacity: 0.95;
+  border-left: 3px solid #A3E635;
+  padding-left: 0.5rem;
+}
+
+.showcaseProducts {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.miniProductCard {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: var(--transition);
+}
+
+.miniProductCard:hover {
+  transform: translateX(-4px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.miniImageWrapper {
+  width: 3.5rem;
+  height: 3.5rem;
+  background-color: #ffffff;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.miniImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.miniProductInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.miniProductName {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.miniProductPrice {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+}
+
+.miniAddBtn {
+  background-color: #0E7F3A;
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 4px 10px rgba(14, 127, 58, 0.2);
+}
+
+.miniAddBtn:hover {
+  background-color: #A3E635;
+  color: #071f11;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(163, 230, 53, 0.3);
+}
+
+
+/* 2. Trust Badges */
+.trustSection {
+  border-top: 1px solid var(--border);
+  padding-top: 3rem;
+  padding-bottom: 1rem;
+}
+
+.trustGrid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.trustItem {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.trustIcon {
+  color: var(--primary);
+  background-color: var(--primary-light);
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.trustText {
+  display: flex;
+  flex-direction: column;
+}
+
+.trustText strong {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.trustText span {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Section Header */
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 2rem;
+}
+
+.sectionTitle {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.viewAllLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.viewAllLink:hover {
+  text-decoration: underline;
+}
+
+/* 3. Categories Grid - Blinkit Style */
+.categoriesGrid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 1rem;
+}
+
+.categoryCard {
+  background-color: var(--bg-secondary);
+  border: 1.5px solid hsl(220 10% 92%);
+  border-radius: 18px;
+  padding: 1rem 0.5rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: var(--transition);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme='dark'] .categoryCard {
+  background-color: hsl(220 15% 14%);
+  border-color: hsl(220 12% 20%);
+}
+
+.categoryCard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(14,127,58,0) 60%, rgba(14,127,58,0.04) 100%);
+  border-radius: 18px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.categoryCard:hover {
+  transform: translateY(-5px);
+  border-color: #0E7F3A;
+  box-shadow: 0 8px 24px rgba(14, 127, 58, 0.12);
+}
+
+.categoryCard:hover::before {
+  opacity: 1;
+}
+
+.categoryThumbWrapper {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  background: linear-gradient(145deg, hsl(220 10% 97%), hsl(220 10% 93%));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+[data-theme='dark'] .categoryThumbWrapper {
+  background: linear-gradient(145deg, hsl(220 15% 18%), hsl(220 15% 13%));
+}
+
+.categoryThumb {
+  width: 85%;
+  height: 85%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.categoryCard:hover .categoryThumb {
+  transform: scale(1.08);
+}
+
+.categoryName {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+}
+
+/* 4. Deals Grid */
+.productsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.loadingSpinner {
+  text-align: center;
+  padding: 3rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* 6. Testimonials */
+.sectionHeaderCentered {
+  text-align: center;
+  margin-bottom: 3.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.starsRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.starsText {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.testimonialsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.testimonialCard {
+  padding: 2.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.testimonialStars {
+  display: flex;
+  color: var(--secondary);
+  margin-bottom: 1rem;
+}
+
+.comment {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+.customerProfile {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: auto;
+}
+
+.customerAvatar {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+.customerDetails {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.customerDetails strong {
+  font-size: 0.92rem;
+  color: var(--text-primary);
+}
+
+.customerDetails span {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Responsiveness */
+@media (max-width: 1280px) {
+  .categoriesGrid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .heroCard {
+    grid-template-columns: 1fr;
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+  
+  .heroContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .heroCta {
+    justify-content: center;
+  }
+
+  .heroShowcaseColumn {
+    justify-content: center;
+    margin-top: 1rem;
+    width: 100%;
+  }
+
+  .showcaseCard {
+    max-width: 100%;
+  }
+  
+  .categoriesGrid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  
+  .productsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .testimonialsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .heroTitle {
+    font-size: 2.1rem;
+  }
+
+  .heroCta {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .heroShopNowBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .miniProductCard {
+    padding: 0.65rem 0.85rem;
+  }
+  
+  .categoriesGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.65rem;
+  }
+}
+
