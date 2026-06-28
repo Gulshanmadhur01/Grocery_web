@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
 import { User, Mail, Calendar, Key, UserCheck, Package, ShoppingBag, Eye } from 'lucide-react';
 import styles from './Profile.module.css';
