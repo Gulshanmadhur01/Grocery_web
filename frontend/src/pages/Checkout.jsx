@@ -18,6 +18,7 @@ const Checkout = () => {
 
   const [paymentMethod, setPaymentMethod] = useState('card'); // 'card', 'upi', 'cod'
   const [upiId, setUpiId] = useState('');
+  const [step, setStep] = useState(1); // Step 1: Shipping, Step 2: Payment
 
   const [card, setCard] = useState({
     number: '',
@@ -59,7 +60,7 @@ const Checkout = () => {
     }
   };
 
-  const validateForm = () => {
+  const validateShipping = () => {
     const errors = {};
     if (!address.fullName.trim()) errors.fullName = 'Full Name is required';
     if (!address.phone.trim()) errors.phone = 'Phone number is required';
@@ -67,8 +68,13 @@ const Checkout = () => {
     if (!address.city.trim()) errors.city = 'City is required';
     if (!address.zipCode.trim()) errors.zipCode = 'ZIP Code is required';
     
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const validatePayment = () => {
+    const errors = {};
     if (paymentMethod === 'card') {
-      // Simulate simple card validation
       if (!card.number.trim() || card.number.replace(/\s/g, '').length < 16) {
         errors.cardNumber = 'Invalid Card Number (16 digits required)';
       }
@@ -88,24 +94,30 @@ const Checkout = () => {
     return Object.keys(errors).length === 0;
   };
 
-  const handlePlaceOrder = async (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
-
-    setLoading(true);
-    const shippingString = `${address.fullName}, Phone: ${address.phone}, Address: ${address.streetAddress}, ${address.city} - ${address.zipCode}`;
-    
-    let displayMethod = 'Card';
-    if (paymentMethod === 'upi') displayMethod = 'UPI';
-    if (paymentMethod === 'cod') displayMethod = 'Cash on Delivery';
-
-    const result = await placeOrder(shippingString, displayMethod);
-    setLoading(false);
-
-    if (result.success) {
-      setOrderSuccess(result.order);
+    if (step === 1) {
+      if (validateShipping()) {
+        setStep(2);
+      }
     } else {
-      alert(`Order placement failed: ${result.message}`);
+      if (!validatePayment()) return;
+
+      setLoading(true);
+      const shippingString = `${address.fullName}, Phone: ${address.phone}, Address: ${address.streetAddress}, ${address.city} - ${address.zipCode}`;
+      
+      let displayMethod = 'Card';
+      if (paymentMethod === 'upi') displayMethod = 'UPI';
+      if (paymentMethod === 'cod') displayMethod = 'Cash on Delivery';
+
+      const result = await placeOrder(shippingString, displayMethod);
+      setLoading(false);
+
+      if (result.success) {
+        setOrderSuccess(result.order);
+      } else {
+        alert(`Order placement failed: ${result.message}`);
+      }
     }
   };
 
@@ -206,190 +218,217 @@ const Checkout = () => {
         <Link to="/cart" className={styles.backBtn}><ArrowLeft size={16} /> Back to Cart</Link>
       </div>
 
-      <form onSubmit={handlePlaceOrder} className={styles.layout}>
-        {/* Left Column: Shipping & Payment Form */}
+      {/* Progressive Step Progress Tracker */}
+      <div className={styles.progressTracker}>
+        <div 
+          onClick={() => step === 2 && setStep(1)}
+          className={`${styles.stepIndicator} ${step >= 1 ? styles.stepActive : ''} ${step === 2 ? styles.stepClickable : ''}`}
+        >
+          <span className={styles.stepNum}>1</span>
+          <span className={styles.stepLabel}>Shipping Address</span>
+        </div>
+        <div className={`${styles.stepConnector} ${step >= 2 ? styles.stepConnectorActive : ''}`}></div>
+        <div className={`${styles.stepIndicator} ${step >= 2 ? styles.stepActive : ''}`}>
+          <span className={styles.stepNum}>2</span>
+          <span className={styles.stepLabel}>Payment Method</span>
+        </div>
+      </div>
+
+      <form onSubmit={handleFormSubmit} className={styles.layout}>
+        {/* Left Column: Shipping or Payment Form depending on Step */}
         <div className={styles.formColumn}>
-          {/* Shipping Section */}
-          <div className={`${styles.sectionCard} card`}>
-            <h2 className={styles.sectionTitle}><Truck size={20} /> Shipping Details</h2>
-            <hr className={styles.divider} />
-            
-            <div className="form-group">
-              <label className="form-label">Receiver's Full Name</label>
-              <input 
-                type="text" 
-                name="fullName"
-                value={address.fullName} 
-                onChange={(e) => handleInputChange(e, 'address')}
-                className="form-control"
-                placeholder="e.g. John Doe"
-              />
-              {formErrors.fullName && <span className={styles.errMessage}>{formErrors.fullName}</span>}
-            </div>
-
-            <div className={styles.formRow}>
+          {step === 1 && (
+            <div className={`${styles.sectionCard} card animate-fade-in`}>
+              <h2 className={styles.sectionTitle}><Truck size={20} /> Shipping Details</h2>
+              <hr className={styles.divider} />
+              
               <div className="form-group">
-                <label className="form-label">Phone Number</label>
+                <label className="form-label">Receiver's Full Name</label>
                 <input 
                   type="text" 
-                  name="phone"
-                  value={address.phone} 
+                  name="fullName"
+                  value={address.fullName} 
                   onChange={(e) => handleInputChange(e, 'address')}
                   className="form-control"
-                  placeholder="e.g. +1 555-019-2834"
+                  placeholder="e.g. John Doe"
                 />
-                {formErrors.phone && <span className={styles.errMessage}>{formErrors.phone}</span>}
+                {formErrors.fullName && <span className={styles.errMessage}>{formErrors.fullName}</span>}
               </div>
-              <div className="form-group">
-                <label className="form-label">ZIP Code</label>
-                <input 
-                  type="text" 
-                  name="zipCode"
-                  value={address.zipCode} 
-                  onChange={(e) => handleInputChange(e, 'address')}
-                  className="form-control"
-                  placeholder="10001"
-                />
-                {formErrors.zipCode && <span className={styles.errMessage}>{formErrors.zipCode}</span>}
-              </div>
-            </div>
 
-            <div className="form-group">
-              <label className="form-label">Delivery Street Address</label>
-              <input 
-                type="text" 
-                name="streetAddress"
-                value={address.streetAddress} 
-                onChange={(e) => handleInputChange(e, 'address')}
-                className="form-control"
-                placeholder="Apartment, Street Name, Block"
-              />
-              {formErrors.streetAddress && <span className={styles.errMessage}>{formErrors.streetAddress}</span>}
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">City</label>
-              <input 
-                type="text" 
-                name="city"
-                value={address.city} 
-                onChange={(e) => handleInputChange(e, 'address')}
-                className="form-control"
-                placeholder="e.g. New York"
-              />
-              {formErrors.city && <span className={styles.errMessage}>{formErrors.city}</span>}
-            </div>
-          </div>
-
-          {/* Payment Section */}
-          <div className={`${styles.sectionCard} card`}>
-            <h2 className={styles.sectionTitle}><Landmark size={20} /> Payment Method (Simulated)</h2>
-            <hr className={styles.divider} />
-
-            {/* Payment Method Selector Tabs */}
-            <div className={styles.paymentTabs}>
-              <button 
-                type="button" 
-                onClick={() => setPaymentMethod('card')} 
-                className={`${styles.paymentTabBtn} ${paymentMethod === 'card' ? styles.paymentTabBtnActive : ''}`}
-              >
-                <CreditCard size={20} />
-                <span>Credit/Debit Card</span>
-              </button>
-              <button 
-                type="button" 
-                onClick={() => setPaymentMethod('upi')} 
-                className={`${styles.paymentTabBtn} ${paymentMethod === 'upi' ? styles.paymentTabBtnActive : ''}`}
-              >
-                <Smartphone size={20} />
-                <span>UPI ID</span>
-              </button>
-              <button 
-                type="button" 
-                onClick={() => setPaymentMethod('cod')} 
-                className={`${styles.paymentTabBtn} ${paymentMethod === 'cod' ? styles.paymentTabBtnActive : ''}`}
-              >
-                <Coins size={20} />
-                <span>Cash on Delivery</span>
-              </button>
-            </div>
-
-            {/* Conditional Input Rendering */}
-            {paymentMethod === 'card' && (
-              <div className="animate-fade-in">
+              <div className={styles.formRow}>
                 <div className="form-group">
-                  <label className="form-label">Credit Card Number</label>
+                  <label className="form-label">Phone Number</label>
                   <input 
                     type="text" 
-                    name="number"
-                    value={card.number} 
-                    onChange={(e) => handleInputChange(e, 'card')}
+                    name="phone"
+                    value={address.phone} 
+                    onChange={(e) => handleInputChange(e, 'address')}
                     className="form-control"
-                    placeholder="xxxx xxxx xxxx xxxx"
-                    maxLength="19"
+                    placeholder="e.g. +1 555-019-2834"
                   />
-                  {formErrors.cardNumber && <span className={styles.errMessage}>{formErrors.cardNumber}</span>}
+                  {formErrors.phone && <span className={styles.errMessage}>{formErrors.phone}</span>}
                 </div>
+                <div className="form-group">
+                  <label className="form-label">ZIP Code</label>
+                  <input 
+                    type="text" 
+                    name="zipCode"
+                    value={address.zipCode} 
+                    onChange={(e) => handleInputChange(e, 'address')}
+                    className="form-control"
+                    placeholder="10001"
+                  />
+                  {formErrors.zipCode && <span className={styles.errMessage}>{formErrors.zipCode}</span>}
+                </div>
+              </div>
 
-                <div className={styles.formRow}>
+              <div className="form-group">
+                <label className="form-label">Delivery Street Address</label>
+                <input 
+                  type="text" 
+                  name="streetAddress"
+                  value={address.streetAddress} 
+                  onChange={(e) => handleInputChange(e, 'address')}
+                  className="form-control"
+                  placeholder="Apartment, Street Name, Block"
+                />
+                {formErrors.streetAddress && <span className={styles.errMessage}>{formErrors.streetAddress}</span>}
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">City</label>
+                <input 
+                  type="text" 
+                  name="city"
+                  value={address.city} 
+                  onChange={(e) => handleInputChange(e, 'address')}
+                  className="form-control"
+                  placeholder="e.g. New York"
+                />
+                {formErrors.city && <span className={styles.errMessage}>{formErrors.city}</span>}
+              </div>
+            </div>
+          )}
+
+          {step === 2 && (
+            <div className={`${styles.sectionCard} card animate-fade-in`}>
+              <div className={styles.sectionHeaderRow}>
+                <h2 className={styles.sectionTitle}><Landmark size={20} /> Payment Method</h2>
+                <button 
+                  type="button" 
+                  onClick={() => setStep(1)} 
+                  className={styles.editAddressBtn}
+                >
+                  Edit Address
+                </button>
+              </div>
+              <hr className={styles.divider} />
+
+              {/* Payment Method Selector Tabs */}
+              <div className={styles.paymentTabs}>
+                <button 
+                  type="button" 
+                  onClick={() => setPaymentMethod('card')} 
+                  className={`${styles.paymentTabBtn} ${paymentMethod === 'card' ? styles.paymentTabBtnActive : ''}`}
+                >
+                  <CreditCard size={20} />
+                  <span>Credit/Debit Card</span>
+                </button>
+                <button 
+                  type="button" 
+                  onClick={() => setPaymentMethod('upi')} 
+                  className={`${styles.paymentTabBtn} ${paymentMethod === 'upi' ? styles.paymentTabBtnActive : ''}`}
+                >
+                  <Smartphone size={20} />
+                  <span>UPI ID</span>
+                </button>
+                <button 
+                  type="button" 
+                  onClick={() => setPaymentMethod('cod')} 
+                  className={`${styles.paymentTabBtn} ${paymentMethod === 'cod' ? styles.paymentTabBtnActive : ''}`}
+                >
+                  <Coins size={20} />
+                  <span>Cash on Delivery</span>
+                </button>
+              </div>
+
+              {/* Conditional Input Rendering */}
+              {paymentMethod === 'card' && (
+                <div>
                   <div className="form-group">
-                    <label className="form-label">Expiry Date</label>
+                    <label className="form-label">Credit Card Number</label>
                     <input 
                       type="text" 
-                      name="expiry"
-                      value={card.expiry} 
+                      name="number"
+                      value={card.number} 
                       onChange={(e) => handleInputChange(e, 'card')}
                       className="form-control"
-                      placeholder="MM/YY"
-                      maxLength="5"
+                      placeholder="xxxx xxxx xxxx xxxx"
+                      maxLength="19"
                     />
-                    {formErrors.cardExpiry && <span className={styles.errMessage}>{formErrors.cardExpiry}</span>}
+                    {formErrors.cardNumber && <span className={styles.errMessage}>{formErrors.cardNumber}</span>}
                   </div>
+
+                  <div className={styles.formRow}>
+                    <div className="form-group">
+                      <label className="form-label">Expiry Date</label>
+                      <input 
+                        type="text" 
+                        name="expiry"
+                        value={card.expiry} 
+                        onChange={(e) => handleInputChange(e, 'card')}
+                        className="form-control"
+                        placeholder="MM/YY"
+                        maxLength="5"
+                      />
+                      {formErrors.cardExpiry && <span className={styles.errMessage}>{formErrors.cardExpiry}</span>}
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">CVV</label>
+                      <input 
+                        type="password" 
+                        name="cvv"
+                        value={card.cvv} 
+                        onChange={(e) => handleInputChange(e, 'card')}
+                        className="form-control"
+                        placeholder="***"
+                        maxLength="4"
+                      />
+                      {formErrors.cardCvv && <span className={styles.errMessage}>{formErrors.cardCvv}</span>}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {paymentMethod === 'upi' && (
+                <div className={styles.upiSection}>
                   <div className="form-group">
-                    <label className="form-label">CVV</label>
+                    <label className="form-label">Enter UPI ID</label>
                     <input 
-                      type="password" 
-                      name="cvv"
-                      value={card.cvv} 
-                      onChange={(e) => handleInputChange(e, 'card')}
+                      type="text" 
+                      value={upiId} 
+                      onChange={(e) => setUpiId(e.target.value)}
                       className="form-control"
-                      placeholder="***"
-                      maxLength="4"
+                      placeholder="e.g. mobile@paytm or username@okaxis"
                     />
-                    {formErrors.cardCvv && <span className={styles.errMessage}>{formErrors.cardCvv}</span>}
+                    {formErrors.upiId && <span className={styles.errMessage}>{formErrors.upiId}</span>}
                   </div>
+                  <p className={styles.upiInfo}>
+                    💡 Please keep your UPI app open on your mobile device. We will send a payment notification link once you place the order.
+                  </p>
                 </div>
-              </div>
-            )}
+              )}
 
-            {paymentMethod === 'upi' && (
-              <div className={`${styles.upiSection} animate-fade-in`}>
-                <div className="form-group">
-                  <label className="form-label">Enter UPI ID</label>
-                  <input 
-                    type="text" 
-                    value={upiId} 
-                    onChange={(e) => setUpiId(e.target.value)}
-                    className="form-control"
-                    placeholder="e.g. mobile@paytm or username@okaxis"
-                  />
-                  {formErrors.upiId && <span className={styles.errMessage}>{formErrors.upiId}</span>}
+              {paymentMethod === 'cod' && (
+                <div className={styles.codSection}>
+                  <h4 className={styles.codTitle}>🎉 Cash on Delivery Selected</h4>
+                  <p className={styles.codDesc}>
+                    You can pay with Cash, UPI, or Cards directly to our delivery partner when your fresh groceries reach your doorstep. No advance payment required!
+                  </p>
                 </div>
-                <p className={styles.upiInfo}>
-                  💡 Please keep your UPI app open on your mobile device. We will send a payment notification link once you place the order.
-                </p>
-              </div>
-            )}
-
-            {paymentMethod === 'cod' && (
-              <div className={`${styles.codSection} animate-fade-in`}>
-                <h4 className={styles.codTitle}>🎉 Cash on Delivery Selected</h4>
-                <p className={styles.codDesc}>
-                  You can pay with Cash, UPI, or Cards directly to our delivery partner when your fresh groceries reach your doorstep. No advance payment required!
-                </p>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Right Column: Invoice Summary Card */}
@@ -426,13 +465,22 @@ const Checkout = () => {
               <span>₹{grandTotal.toFixed(2)}</span>
             </div>
 
-            <button 
-              type="submit" 
-              disabled={loading}
-              className={`btn btn-primary ${styles.orderBtn}`}
-            >
-              {loading ? 'Processing Order...' : `Pay & Place Order` }
-            </button>
+            {step === 1 ? (
+              <button 
+                type="submit" 
+                className={`btn btn-primary ${styles.orderBtn}`}
+              >
+                Proceed to Payment
+              </button>
+            ) : (
+              <button 
+                type="submit" 
+                disabled={loading}
+                className={`btn btn-primary ${styles.orderBtn}`}
+              >
+                {loading ? 'Processing Order...' : `Pay & Place Order` }
+              </button>
+            )}
           </div>
         </div>
       </form>

@@ -403,3 +403,93 @@
   color: var(--text-secondary);
 }
 
+/* Progress Tracker Styling */
+.progressTracker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 3rem;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1rem 2rem;
+}
+
+.stepIndicator {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: var(--transition);
+}
+
+.stepClickable {
+  cursor: pointer;
+}
+
+.stepClickable:hover {
+  color: var(--primary);
+}
+
+.stepActive {
+  color: var(--primary);
+}
+
+.stepNum {
+  width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--border);
+  font-size: 0.85rem;
+  font-weight: 700;
+  transition: var(--transition);
+}
+
+.stepActive .stepNum {
+  border-color: var(--primary);
+  background-color: var(--primary);
+  color: white;
+}
+
+.stepConnector {
+  flex: 1;
+  height: 2px;
+  background-color: var(--border);
+  margin: 0 1.5rem;
+  max-width: 150px;
+  transition: var(--transition);
+}
+
+.stepConnectorActive {
+  background-color: var(--primary);
+}
+
+/* Edit Address button on step 2 */
+.sectionHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.editAddressBtn {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0;
+  transition: var(--transition);
+}
+
+.editAddressBtn:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+
