@@ -243,7 +243,7 @@ const Profile = () => {
                 <ShoppingBag size={48} className={styles.noOrdersIcon} />
                 <h3>No Orders Placed Yet</h3>
                 <p>Browse products and place your first grocery order today!</p>
-                <Link to="/shop" className="btn btn-primary">Start Browsing</Link>
+                <Link to="/categories" className="btn btn-primary">Start Browsing</Link>
               </div>
             ) : (
               <div className={styles.ordersList}>

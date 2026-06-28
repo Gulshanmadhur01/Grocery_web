@@ -369,12 +369,86 @@
   background-color: var(--primary);
 }
 
+/* Search Autocomplete suggestions */
+.searchContainer {
+  position: relative;
+  flex: 1;
+  max-width: 500px;
+}
+
+.searchDropdown {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 100%;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+}
+
+.searchSuggestionItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  border-bottom: 1px solid var(--border);
+}
+
+.searchSuggestionItem:last-child {
+  border-bottom: none;
+}
+
+.searchSuggestionItem:hover {
+  background-color: var(--bg-tertiary);
+}
+
+.suggestionThumb {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  border: 1px solid var(--border);
+  background-color: var(--bg-primary);
+}
+
+.suggestionInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.suggestionName {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.suggestionCategory {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: capitalize;
+}
+
+.suggestionPrice {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
 @media (max-width: 992px) {
   .menuNav {
     display: none;
   }
   
-  .searchForm {
+  .searchContainer {
     max-width: 320px;
   }
 }
@@ -384,7 +458,7 @@
     display: none;
   }
   
-  .searchForm {
+  .searchContainer {
     display: none;
   }
   
@@ -396,3 +470,4 @@
     display: none;
   }
 }
+

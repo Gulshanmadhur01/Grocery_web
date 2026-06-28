@@ -47,6 +47,10 @@ export const AppProvider = ({ children }) => {
   const [showLocationModal, setShowLocationModal] = useState(() => {
     return !localStorage.getItem('deliveryLocation');
   });
+  
+  // Cart Side-Drawer Toggle State
+  const [cartDrawerOpen, setCartDrawerOpen] = useState(false);
+
 
   const setDeliveryLocation = (loc) => {
     setDeliveryLocationState(loc);
@@ -204,7 +208,10 @@ export const AppProvider = ({ children }) => {
       }
       return [...prevCart, { ...product, quantity: Math.min(quantity, product.stock) }];
     });
+    // Open the premium cart drawer automatically for quick check/actions
+    setCartDrawerOpen(true);
   };
+
 
   // Cart: Remove from Cart
   const removeFromCart = (productId) => {
@@ -469,8 +476,10 @@ export const AppProvider = ({ children }) => {
       activeCategory, setActiveCategory,
       activeSort, setActiveSort,
       deliveryLocation, setDeliveryLocation,
-      showLocationModal, setShowLocationModal
+      showLocationModal, setShowLocationModal,
+      cartDrawerOpen, setCartDrawerOpen
     }}>
+
       {children}
     </AppContext.Provider>
   );

@@ -2,7 +2,8 @@ import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
 import { ShoppingCart, Trash2, ArrowLeft, Plus, Minus, CreditCard } from 'lucide-react';
-import styles from './Cart.jsx.module.css'; // Let's name it Cart.jsx.module.css to match standard layout or Cart.module.css. Let's use Cart.module.css.
+import OptimizedImage from '../components/OptimizedImage';
+import styles from './Cart.jsx.module.css';
 
 const Cart = () => {
   const { 
@@ -20,7 +21,6 @@ const Cart = () => {
 
   const handleCheckoutClick = () => {
     if (!user) {
-      // If not logged in, send them to login page (which is on /profile page)
       navigate('/profile?redirect=checkout');
     } else {
       navigate('/checkout');
@@ -35,7 +35,7 @@ const Cart = () => {
         </div>
         <h2>Your Shopping Cart is Empty</h2>
         <p>Looks like you haven't added any fresh groceries to your cart yet.</p>
-        <Link to="/shop" className="btn btn-primary">
+        <Link to="/categories" className="btn btn-primary">
           Start Shopping <ArrowLeft size={16} style={{ transform: 'rotate(180deg)' }} />
         </Link>
       </div>
@@ -46,7 +46,7 @@ const Cart = () => {
     <div className="container animate-fade-in">
       <div className={styles.header}>
         <h1 className={styles.title}>Shopping Cart</h1>
-        <Link to="/shop" className={styles.continueShop}>
+        <Link to="/categories" className={styles.continueShop}>
           <ArrowLeft size={16} /> Continue Shopping
         </Link>
       </div>
@@ -56,15 +56,14 @@ const Cart = () => {
         <div className={styles.itemsColumn}>
           {cart.map((item) => (
             <div key={item.id} className={`${styles.cartItem} card`}>
-              <img 
-                src={item.image || '/assets/images/placeholder.svg'} 
-                alt={item.name} 
-                className={styles.itemImage} 
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = '/assets/images/placeholder.svg';
-                }}
-              />
+              <div className={styles.itemImageWrapper}>
+                <OptimizedImage 
+                  src={item.image} 
+                  alt={item.name} 
+                  fallbackType="product"
+                  aspectRatio="1/1"
+                />
+              </div>
               
               <div className={styles.itemDetails}>
                 <span className={styles.itemCategory}>{item.category.replace('-', ' ')}</span>
@@ -154,3 +153,4 @@ const Cart = () => {
 };
 
 export default Cart;
+

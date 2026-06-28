@@ -11,7 +11,7 @@ const Footer = () => {
         <div className={styles.columnBrand}>
           <Link to="/" className={styles.logo}>
             <ShoppingBag className={styles.logoIcon} />
-            <span>Fresh<span className={styles.logoAccent}>Cart</span></span>
+            <span>Fresh<span className={styles.logoAccent}>Mart</span></span>
           </Link>
           <p className={styles.description}>
             Your premium online grocery store. Delivering fresh organic vegetables, fruits, dairy products, bakery, and snacks straight to your doorstep.
@@ -22,11 +22,11 @@ const Footer = () => {
         <div className={styles.column}>
           <h4 className={styles.heading}>Categories</h4>
           <ul className={styles.linksList}>
-            <li><Link to="/shop?category=fruits-vegetables">Fruits & Vegetables</Link></li>
-            <li><Link to="/shop?category=dairy-eggs">Dairy & Eggs</Link></li>
-            <li><Link to="/shop?category=bakery-bread">Bakery & Bread</Link></li>
-            <li><Link to="/shop?category=beverages">Beverages</Link></li>
-            <li><Link to="/shop?category=snacks-sweets">Snacks & Sweets</Link></li>
+            <li><Link to="/categories?category=fruits-vegetables">Fruits & Vegetables</Link></li>
+            <li><Link to="/categories?category=dairy-eggs">Dairy & Eggs</Link></li>
+            <li><Link to="/categories?category=bakery">Bakery & Biscuits</Link></li>
+            <li><Link to="/categories?category=beverages">Beverages</Link></li>
+            <li><Link to="/categories?category=sweet-tooth">Sweet Tooth</Link></li>
           </ul>
         </div>
 
@@ -34,7 +34,7 @@ const Footer = () => {
         <div className={styles.column}>
           <h4 className={styles.heading}>Quick Links</h4>
           <ul className={styles.linksList}>
-            <li><Link to="/shop">Shop All Products</Link></li>
+            <li><Link to="/categories">Browse Categories</Link></li>
             <li><Link to="/cart">My Cart</Link></li>
             <li><Link to="/profile">My Account</Link></li>
             <li><Link to="/admin">Admin Dashboard</Link></li>
@@ -55,7 +55,7 @@ const Footer = () => {
             </li>
             <li>
               <Mail size={16} className={styles.contactIcon} />
-              <span>support@freshcart.com</span>
+              <span>support@freshmart.com</span>
             </li>
           </ul>
         </div>
@@ -64,7 +64,7 @@ const Footer = () => {
       <div className={styles.bottomBar}>
         <div className={`${styles.bottomContainer} container`}>
           <p className={styles.copyright}>
-            © {new Date().getFullYear()} FreshCart. All rights reserved.
+            © {new Date().getFullYear()} FreshMart. All rights reserved.
           </p>
           <p className={styles.maker}>
             Made with <Heart size={14} className={styles.heartIcon} /> for a healthy life.
@@ -76,3 +76,4 @@ const Footer = () => {
 };
 
 export default Footer;
+

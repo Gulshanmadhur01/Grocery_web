@@ -1,0 +1,193 @@
+.offersWrapper {
+  padding-top: 2rem;
+}
+
+/* Hero Banner */
+.heroBanner {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 2rem;
+  background: linear-gradient(135deg, var(--primary-light) 0%, hsl(var(--hue) 30% 90%) 100%);
+  border-radius: var(--radius-lg);
+  padding: 3rem;
+  align-items: center;
+  margin-bottom: 3rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+[data-theme='dark'] .heroBanner {
+  background: linear-gradient(135deg, hsl(220 15% 12%) 0%, hsl(var(--hue) 40% 12%) 100%);
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--secondary);
+  color: hsl(220 15% 15%);
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+}
+
+.heroImageWrapper {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+/* Promos Section */
+.promosSection {
+  margin-bottom: 3.5rem;
+}
+
+.sectionTitle {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.promosGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.promoCard {
+  background-color: var(--bg-secondary);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+  transition: var(--transition);
+}
+
+.promoCard:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.promoDiscount {
+  background-color: var(--primary-light);
+  color: var(--success);
+  padding: 0.25rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  align-self: flex-start;
+}
+
+.promoDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.promoTitle {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.promoDesc {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.promoMin {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.copyBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  border: 1px solid var(--border);
+}
+
+.copyBtn:hover {
+  background-color: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.copied {
+  background-color: var(--success) !important;
+  color: white !important;
+  border-color: var(--success) !important;
+}
+
+/* Deals Section */
+.dealsSection {
+  margin-bottom: 2rem;
+}
+
+.productsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.loadingSkeleton {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.skeletonCard {
+  height: 320px;
+  background-color: var(--border);
+  border-radius: var(--radius-md);
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 0.3; }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .heroBanner {
+    grid-template-columns: 1fr;
+    padding: 2rem;
+    gap: 1.5rem;
+  }
+  .title {
+    font-size: 2.2rem;
+  }
+}

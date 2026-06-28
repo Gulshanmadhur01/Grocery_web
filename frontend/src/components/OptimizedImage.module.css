@@ -1,0 +1,131 @@
+.imageContainer {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-tertiary);
+  border-radius: inherit;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  transition: opacity 0.5s ease;
+}
+
+.imageHidden {
+  opacity: 0;
+}
+
+.imageLoaded {
+  opacity: 1;
+}
+
+/* Hover Zoom Effect */
+.zoomEffect:hover .image {
+  transform: scale(1.08);
+}
+
+.zoomEffect .image {
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+}
+
+/* Shimmer Loading Skeleton */
+.skeleton {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--border);
+  overflow: hidden;
+}
+
+.shimmer {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.6) 60%,
+    transparent 100%
+  );
+  animation: shimmerAnim 1.6s infinite;
+}
+
+[data-theme='dark'] .shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 20%,
+    rgba(255, 255, 255, 0.1) 60%,
+    transparent 100%
+  );
+}
+
+@keyframes shimmerAnim {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Fallback Styling */
+.fallbackContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+.fallbackIcon {
+  width: 40%;
+  height: 40%;
+  max-width: 48px;
+  max-height: 48px;
+  stroke: var(--text-muted);
+  opacity: 0.7;
+  transition: var(--transition);
+}
+
+.productFallback {
+  background: linear-gradient(135deg, hsl(var(--hue) 10% 93%), hsl(var(--hue) 10% 88%));
+}
+
+.categoryFallback {
+  background: linear-gradient(135deg, hsl(38 92% 96%), hsl(38 92% 90%));
+}
+
+.avatarFallback {
+  background: linear-gradient(135deg, hsl(200 10% 93%), hsl(200 10% 88%));
+}
+
+.bannerFallback {
+  background: linear-gradient(135deg, hsl(var(--hue) 20% 90%), hsl(var(--hue) 20% 80%));
+}
+
+[data-theme='dark'] .productFallback {
+  background: linear-gradient(135deg, hsl(220 15% 14%), hsl(220 15% 10%));
+}
+
+[data-theme='dark'] .categoryFallback {
+  background: linear-gradient(135deg, hsl(38 92% 12%), hsl(38 92% 8%));
+}
+
+[data-theme='dark'] .avatarFallback {
+  background: linear-gradient(135deg, hsl(200 10% 14%), hsl(200 10% 10%));
+}
+
+[data-theme='dark'] .bannerFallback {
+  background: linear-gradient(135deg, hsl(var(--hue) 20% 15%), hsl(var(--hue) 20% 10%));
+}

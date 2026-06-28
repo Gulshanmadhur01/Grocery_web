@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
 import { ShoppingBasket, Search, User, LogOut, LayoutDashboard, ShoppingCart, MapPin, Truck, HelpCircle } from 'lucide-react';
@@ -10,19 +10,64 @@ const Navbar = () => {
     cartCount, 
     searchQuery, setSearchQuery,
     setActiveCategory,
-    deliveryLocation, setShowLocationModal
+    deliveryLocation, setShowLocationModal,
+    setCartDrawerOpen,
+    products
   } = useContext(AppContext);
 
   const [searchInput, setSearchInput] = useState(searchQuery);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const [searchSuggestions, setSearchSuggestions] = useState([]);
+  const [showSearchDropdown, setShowSearchDropdown] = useState(false);
   
   const navigate = useNavigate();
   const location = useLocation();
+  const searchFormRef = useRef();
+
+  // Sync search input state with global query
+  useEffect(() => {
+    setSearchInput(searchQuery);
+  }, [searchQuery]);
+
+  // Click outside to close search suggestions
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (searchFormRef.current && !searchFormRef.current.contains(e.target)) {
+        setShowSearchDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, []);
+
+  const handleSearchChange = (e) => {
+    const val = e.target.value;
+    setSearchInput(val);
+    if (val.trim().length > 1 && products && products.length > 0) {
+      const filtered = products.filter(p => 
+        p.name.toLowerCase().includes(val.toLowerCase()) || 
+        p.category.toLowerCase().includes(val.toLowerCase())
+      ).slice(0, 5);
+      setSearchSuggestions(filtered);
+      setShowSearchDropdown(true);
+    } else {
+      setSearchSuggestions([]);
+      setShowSearchDropdown(false);
+    }
+  };
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     setSearchQuery(searchInput);
-    navigate('/shop');
+    setShowSearchDropdown(false);
+    navigate('/categories');
+  };
+
+  const handleSuggestionClick = (productId) => {
+    setSearchInput('');
+    setSearchQuery('');
+    setShowSearchDropdown(false);
+    navigate(`/product/${productId}`);
   };
 
   const handleLogoClick = () => {
@@ -67,24 +112,52 @@ const Navbar = () => {
             <span>Fresh<span className={styles.logoAccent}>Mart</span></span>
           </Link>
 
-          {/* Search Bar */}
-          <form onSubmit={handleSearchSubmit} className={styles.searchForm}>
-            <input 
-              type="text" 
-              placeholder="Search for products, categories..." 
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              className={styles.searchInput}
-            />
-            <button type="submit" className={styles.searchButton}>
-              <Search size={18} />
-            </button>
-          </form>
+          {/* Search Bar with Instant Autocomplete Dropdown */}
+          <div className={styles.searchContainer} ref={searchFormRef}>
+            <form onSubmit={handleSearchSubmit} className={styles.searchForm}>
+              <input 
+                type="text" 
+                placeholder="Search for products, categories..." 
+                value={searchInput}
+                onChange={handleSearchChange}
+                onFocus={() => { if (searchInput.trim().length > 1) setShowSearchDropdown(true); }}
+                className={styles.searchInput}
+              />
+              <button type="submit" className={styles.searchButton}>
+                <Search size={18} />
+              </button>
+            </form>
+
+            {showSearchDropdown && searchSuggestions.length > 0 && (
+              <div className={styles.searchDropdown}>
+                {searchSuggestions.map((product) => (
+                  <div 
+                    key={product.id} 
+                    onClick={() => handleSuggestionClick(product.id)}
+                    className={styles.searchSuggestionItem}
+                  >
+                    <img 
+                      src={product.image || '/assets/images/placeholder.svg'} 
+                      alt={product.name} 
+                      className={styles.suggestionThumb}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = '/assets/images/placeholder.svg';
+                      }}
+                    />
+                    <div className={styles.suggestionInfo}>
+                      <span className={styles.suggestionName}>{product.name}</span>
+                      <span className={styles.suggestionCategory}>{product.category.replace('-', ' ')}</span>
+                    </div>
+                    <span className={styles.suggestionPrice}>₹{product.price}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
           {/* Actions */}
           <div className={styles.actions}>
-
-
             {/* User Account / Profile */}
             {user ? (
               <div className={styles.profileWrapper}>
@@ -148,27 +221,30 @@ const Navbar = () => {
               </Link>
             )}
 
-            {/* Cart Button */}
-            <Link to="/cart" className={styles.cartBtn} title="Shopping Cart">
+            {/* Cart Drawer Trigger Button */}
+            <button 
+              onClick={() => setCartDrawerOpen(true)} 
+              className={styles.cartBtn} 
+              title="Shopping Cart"
+            >
               <div className={styles.cartIconWrapper}>
                 <ShoppingCart size={20} className={styles.actionIcon} />
                 {cartCount > 0 && <span className={styles.cartBadge}>{cartCount}</span>}
               </div>
               <span className={styles.cartLabel}>Cart</span>
-            </Link>
+            </button>
           </div>
         </div>
       </div>
 
-      {/* 3. Sub-header Menu Links */}
+      {/* 3. Sub-header Menu Links (Home, Categories, Offers, About Us, Contact Us) */}
       <nav className={styles.menuNav}>
         <div className={`${styles.menuNavContainer} container`}>
           <Link to="/" className={`${styles.menuLink} ${location.pathname === '/' ? styles.activeMenuLink : ''}`}>Home</Link>
-          <Link to="/shop" className={`${styles.menuLink} ${location.pathname === '/shop' ? styles.activeMenuLink : ''}`}>Shop</Link>
-          <Link to="/shop" onClick={() => setActiveCategory('fruits-vegetables')} className={styles.menuLink}>Categories</Link>
-          <Link to="/shop?sort=rating" className={styles.menuLink}>Offers</Link>
-          <Link to="/" className={styles.menuLink}>About Us</Link>
-          <Link to="/" className={styles.menuLink}>Contact Us</Link>
+          <Link to="/categories" className={`${styles.menuLink} ${location.pathname === '/categories' ? styles.activeMenuLink : ''}`}>Categories</Link>
+          <Link to="/offers" className={`${styles.menuLink} ${location.pathname === '/offers' ? styles.activeMenuLink : ''}`}>Offers</Link>
+          <Link to="/about" className={`${styles.menuLink} ${location.pathname === '/about' ? styles.activeMenuLink : ''}`}>About Us</Link>
+          <Link to="/contact" className={`${styles.menuLink} ${location.pathname === '/contact' ? styles.activeMenuLink : ''}`}>Contact Us</Link>
         </div>
       </nav>
     </header>
@@ -176,3 +252,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
 import ProductCard from '../components/ProductCard';
+import BannerCarousel from '../components/BannerCarousel';
+import OptimizedImage from '../components/OptimizedImage';
 import { 
-  ArrowRight, ShieldCheck, Truck, RefreshCw, BadgePercent, Award, 
-  Star
+  ArrowRight, ShieldCheck, Truck, RefreshCw, BadgePercent, Award, Star
 } from 'lucide-react';
 import styles from './Home.module.css';
 
@@ -14,24 +15,14 @@ const Home = () => {
     categories, 
     loading, 
     setActiveCategory, 
-    setSearchQuery,
-    addToCart
+    setSearchQuery
   } = useContext(AppContext);
   
   const [dealProducts, setDealProducts] = useState([]);
-  const navigate = useNavigate();
-
-  // Get 2 quick-add products for the hero banner
-  const bannerProducts = products.length > 0 
-    ? products.filter(p => ['prod-2', 'prod-13'].includes(p.id)) 
-    : [
-        { id: "prod-2", name: "Banana", price: 48, unit: "1kg", image: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=600&auto=format&fit=crop&q=80" },
-        { id: "prod-13", name: "Amul Taaza Milk", price: 54, unit: "1L", image: "https://images.unsplash.com/photo-1563636619-e9143da7973b?w=600&auto=format&fit=crop&q=80" }
-      ];
 
   useEffect(() => {
     if (products.length > 0) {
-      // Find the specific deals products to display (Apples, Bananas, Atta, Tomato, Milk)
+      // Find specific deals products to display (Apples, Bananas, Atta, Tomato, Milk)
       const deals = products.filter(p => 
         ['prod-2', 'prod-13', 'prod-14', 'prod-5'].includes(p.id)
       );
@@ -69,70 +60,16 @@ const Home = () => {
 
   return (
     <div className={styles.homeWrapper}>
-      {/* 1. Custom Hero Banner Section */}
-      <section className={`${styles.hero} container`}>
-        <div className={styles.heroCard}>
-          <div className={styles.heroContent}>
-            <span className={styles.heroTagline}>🥬 100% Organic & Fresh Daily</span>
-            <h1 className={styles.heroTitle}>
-              Freshness Delivered <br />
-              <span className={styles.heroTitleAccent}>to Your Kitchen</span>
-            </h1>
-            <p className={styles.heroDescription}>
-              Handpicked premium fruits, farm-fresh vegetables, dairy, and pantry staples. Delivered straight to your doorstep in minutes.
-            </p>
-            
-            <div className={styles.heroCta}>
-              <Link to="/shop" className={styles.heroShopNowBtn}
-                onClick={() => { setActiveCategory('all'); setSearchQuery(''); }}
-              >
-                Shop Now <ArrowRight size={18} />
-              </Link>
-              <span className={styles.heroDeliveryGuarantee}>⚡ Delivered in minutes</span>
-            </div>
-          </div>
-          
-          <div className={styles.heroShowcaseColumn}>
-            <div className={styles.showcaseCard}>
-              <h3 className={styles.showcaseTitle}>Today's Hot Sellers</h3>
-              <div className={styles.showcaseProducts}>
-                {bannerProducts.map((product) => (
-                  <div key={product.id} className={styles.miniProductCard}>
-                    <div className={styles.miniImageWrapper}>
-                      <img 
-                        src={product.image || '/assets/images/placeholder.svg'} 
-                        alt={product.name} 
-                        className={styles.miniImage} 
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = '/assets/images/placeholder.svg';
-                        }}
-                      />
-                    </div>
-                    <div className={styles.miniProductInfo}>
-                      <strong className={styles.miniProductName}>{product.name}</strong>
-                      <span className={styles.miniProductPrice}>₹{product.price} / {product.unit}</span>
-                    </div>
-                    <button 
-                      onClick={() => addToCart(product)}
-                      className={styles.miniAddBtn}
-                      title="Add to Cart"
-                    >
-                      Add +
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* 1. Custom Hero Banner Carousel Section */}
+      <section className={`${styles.heroCarouselSection} container`}>
+        <BannerCarousel />
       </section>
 
-      {/* 3. Shop by Categories - Blinkit Style */}
+      {/* 2. Shop by Categories - Blinkit Style */}
       <section className={`${styles.categoriesSection} container`}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>Shop by Category</h2>
-          <Link to="/shop" className={styles.viewAllLink}>
+          <Link to="/categories" className={styles.viewAllLink}>
             See all <ArrowRight size={14} />
           </Link>
         </div>
@@ -140,7 +77,7 @@ const Home = () => {
         <div className={styles.categoriesGrid}>
           {categories.map((cat) => (
             <Link 
-              to={`/shop?category=${cat.slug}`} 
+              to={`/categories?category=${cat.slug}`} 
               key={cat.id} 
               className={styles.categoryCard}
               onClick={() => {
@@ -149,14 +86,12 @@ const Home = () => {
               }}
             >
               <div className={styles.categoryThumbWrapper}>
-                <img 
-                  src={cat.image || '/assets/images/placeholder.svg'} 
-                  alt={cat.name} 
-                  className={styles.categoryThumb} 
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = '/assets/images/placeholder.svg';
-                  }}
+                <OptimizedImage
+                  src={cat.image}
+                  alt={cat.name}
+                  fallbackType="category"
+                  aspectRatio="1/1"
+                  objectFit="cover"
                 />
               </div>
               <span className={styles.categoryName}>{cat.name}</span>
@@ -165,11 +100,11 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 4. Today's Best Deals */}
+      {/* 3. Today's Best Deals */}
       <section className={`${styles.dealsSection} container`}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>Today's Best Deals</h2>
-          <Link to="/shop" className={styles.viewAllLink}>
+          <Link to="/offers" className={styles.viewAllLink}>
             View all deals <ArrowRight size={14} />
           </Link>
         </div>
@@ -185,9 +120,7 @@ const Home = () => {
         )}
       </section>
 
-
-
-      {/* 6. What Our Customers Say (Testimonials) */}
+      {/* 4. What Our Customers Say (Testimonials) */}
       <section className={`${styles.testimonialsSection} container`}>
         <div className={styles.sectionHeaderCentered}>
           <h2 className={styles.sectionTitle}>What Our Customers Say</h2>
@@ -207,15 +140,14 @@ const Home = () => {
               </div>
               <p className={styles.comment}>"{t.comment}"</p>
               <div className={styles.customerProfile}>
-                <img 
-                  src={t.avatar || '/assets/images/placeholder.svg'} 
-                  alt={t.name} 
-                  className={styles.customerAvatar} 
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = '/assets/images/placeholder.svg';
-                  }}
-                />
+                <div className={styles.customerAvatarWrapper}>
+                  <OptimizedImage 
+                    src={t.avatar} 
+                    alt={t.name} 
+                    fallbackType="avatar"
+                    aspectRatio="1/1"
+                  />
+                </div>
                 <div className={styles.customerDetails}>
                   <strong>{t.name}</strong>
                   <span>{t.role}</span>
@@ -226,7 +158,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 2. Trust Badges Row (Moved to bottom) */}
+      {/* 5. Trust Badges Row */}
       <section className={`${styles.trustSection} container`}>
         <div className={styles.trustGrid}>
           <div className={styles.trustItem}>
@@ -271,3 +203,4 @@ const Home = () => {
 };
 
 export default Home;
+

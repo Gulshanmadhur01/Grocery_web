@@ -552,3 +552,17 @@
   }
 }
 
+.heroCarouselSection {
+  padding-top: 1.5rem;
+}
+
+.customerAvatarWrapper {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  border: 2px solid var(--border);
+  flex-shrink: 0;
+}
+
+

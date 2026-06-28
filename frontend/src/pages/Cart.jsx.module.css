@@ -80,14 +80,15 @@
   padding: 1.25rem;
 }
 
-.itemImage {
+.itemImageWrapper {
   width: 5.5rem;
   height: 5.5rem;
-  object-fit: cover;
   border-radius: var(--radius-md);
   border: 1px solid var(--border);
   background-color: var(--bg-tertiary);
+  overflow: hidden;
 }
+
 
 .itemDetails {
   flex: 1;

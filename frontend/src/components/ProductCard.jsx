@@ -1,7 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
-import { Heart, ShoppingCart } from 'lucide-react';
+import { Heart } from 'lucide-react';
+import OptimizedImage from './OptimizedImage';
 import styles from './ProductCard.module.css';
 
 const ProductCard = ({ product }) => {
@@ -33,15 +34,12 @@ const ProductCard = ({ product }) => {
 
       {/* Product Image Link */}
       <Link to={`/product/${product.id}`} className={styles.imageLink}>
-        <img 
-          src={product.image || '/assets/images/placeholder.svg'} 
+        <OptimizedImage 
+          src={product.image} 
           alt={product.name} 
-          className={styles.productImage} 
-          loading="lazy"
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = '/assets/images/placeholder.svg';
-          }}
+          fallbackType="product"
+          zoomOnHover={true}
+          aspectRatio="1/1"
         />
       </Link>
 
@@ -69,3 +67,4 @@ const ProductCard = ({ product }) => {
 };
 
 export default ProductCard;
+

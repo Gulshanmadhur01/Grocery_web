@@ -53,16 +53,6 @@
   box-shadow: var(--shadow-sm);
   position: relative;
   width: 100%;
-  padding-top: 85%; /* Sizing aspect */
-}
-
-.image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 .outOfStockBadge {
@@ -78,7 +68,9 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   box-shadow: var(--shadow-sm);
+  z-index: 10;
 }
+
 
 /* Info Column */
 .infoColumn {
@@ -141,7 +133,7 @@
 
 .priceContainer {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 1rem;
   margin-bottom: 2rem;
   background-color: var(--bg-tertiary);
@@ -149,6 +141,14 @@
   border-radius: var(--radius-md);
   width: 100%;
 }
+
+.deliveryIndicator {
+  margin-left: auto;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
 
 .price {
   font-size: 2.25rem;
@@ -286,3 +286,143 @@
     gap: 3rem;
   }
 }
+
+/* Tabs Section Styling */
+.tabsSection {
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+}
+
+.tabsHeader {
+  display: flex;
+  border-bottom: 2px solid var(--border);
+  gap: 2rem;
+  overflow-x: auto;
+}
+
+.tabBtn {
+  padding: 1rem 0.5rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  position: relative;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.tabBtn:hover {
+  color: var(--primary);
+}
+
+.activeTab {
+  color: var(--primary);
+}
+
+.activeTab::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--primary);
+}
+
+.tabContent {
+  padding: 2rem 0;
+  min-height: 200px;
+}
+
+.tabPane h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.tabPane p {
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.nutritionTable {
+  width: 100%;
+  max-width: 400px;
+  border-collapse: collapse;
+}
+
+.nutritionTable td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
+}
+
+.nutritionTable td:last-child {
+  text-align: right;
+}
+
+.reviewsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.reviewItem {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.reviewStars {
+  display: flex;
+  gap: 0.15rem;
+}
+
+.reviewItem strong {
+  font-size: 1.05rem;
+  color: var(--text-primary);
+}
+
+.reviewItem p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.reviewItem span {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Related Products Styling */
+.relatedSection {
+  margin-bottom: 4rem;
+  border-top: 1px solid var(--border);
+  padding-top: 3rem;
+}
+
+.relatedHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.relatedIcon {
+  color: var(--primary);
+}
+
+.relatedHeader h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.relatedGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+

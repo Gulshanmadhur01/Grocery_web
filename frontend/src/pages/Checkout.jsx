@@ -160,7 +160,7 @@ const Checkout = () => {
           </div>
 
           <div className={styles.successActions}>
-            <Link to="/shop" className="btn btn-primary">Continue Shopping</Link>
+            <Link to="/categories" className="btn btn-primary">Continue Shopping</Link>
             <Link to="/profile" className="btn btn-secondary">Track Order History</Link>
           </div>
         </div>
@@ -174,10 +174,11 @@ const Checkout = () => {
       <div className={`${styles.empty} container`}>
         <h2>No items in checkout</h2>
         <p>Please add grocery products to your cart before proceeding to checkout.</p>
-        <Link to="/shop" className="btn btn-primary">Go to Shop</Link>
+        <Link to="/categories" className="btn btn-primary">Go to Categories</Link>
       </div>
     );
   }
+
 
   return (
     <div className="container animate-fade-in">

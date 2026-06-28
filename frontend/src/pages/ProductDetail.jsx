@@ -1,17 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
-import { Star, ShoppingCart, ArrowLeft, ShieldCheck, Truck, RefreshCw } from 'lucide-react';
+import ProductCard from '../components/ProductCard';
+import OptimizedImage from '../components/OptimizedImage';
+import { Star, ShoppingCart, ArrowLeft, ShieldCheck, Truck, RefreshCw, Sparkles } from 'lucide-react';
 import styles from './ProductDetail.module.css';
 
 const ProductDetail = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const { addToCart } = useContext(AppContext);
+  const { addToCart, products } = useContext(AppContext);
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('description');
+  const [relatedItems, setRelatedItems] = useState([]);
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -30,6 +33,16 @@ const ProductDetail = () => {
     fetchProductDetails();
   }, [id]);
 
+  useEffect(() => {
+    if (product && products.length > 0) {
+      // Find related products in same category, exclude current
+      const filtered = products
+        .filter(p => p.category === product.category && p.id !== product.id)
+        .slice(0, 4);
+      setRelatedItems(filtered);
+    }
+  }, [product, products]);
+
   const handleQtyChange = (val) => {
     const qty = Math.max(1, Math.min(val, product.stock));
     setQuantity(qty);
@@ -37,7 +50,6 @@ const ProductDetail = () => {
 
   const handleAddToCart = () => {
     addToCart(product, quantity);
-    navigate('/cart');
   };
 
   if (loading) {
@@ -49,19 +61,36 @@ const ProductDetail = () => {
       <div className={`${styles.notFound} container`}>
         <h2>Product Not Found</h2>
         <p>The grocery item you're looking for might be out of stock or removed.</p>
-        <Link to="/shop" className="btn btn-primary">Back to Shop</Link>
+        <Link to="/categories" className="btn btn-primary">Back to Categories</Link>
       </div>
     );
   }
 
   const isOutOfStock = product.stock <= 0;
 
+  // Simulated Nutritional Facts depending on Category
+  const getNutritionFacts = () => {
+    const cat = product.category;
+    if (cat === 'fruits-vegetables') {
+      return { cal: '45 kcal', fat: '0.1g', carbs: '11g', fiber: '2.4g', protein: '0.8g' };
+    } else if (cat === 'dairy-eggs') {
+      return { cal: '146 kcal', fat: '8g', carbs: '4.8g', fiber: '0g', protein: '8g' };
+    } else if (cat === 'bakery' || cat === 'snacks') {
+      return { cal: '290 kcal', fat: '14g', carbs: '42g', fiber: '1.8g', protein: '4.5g' };
+    } else if (cat === 'sweet-tooth') {
+      return { cal: '340 kcal', fat: '16g', carbs: '48g', fiber: '0.5g', protein: '3.8g' };
+    }
+    return { cal: '120 kcal', fat: '3.5g', carbs: '18g', fiber: '1.2g', protein: '2.5g' };
+  };
+
+  const nutrition = getNutritionFacts();
+
   return (
     <div className="container animate-fade-in">
       {/* Back Link */}
       <div className={styles.backWrapper}>
-        <Link to="/shop" className={styles.backLink}>
-          <ArrowLeft size={16} /> Back to Shop
+        <Link to="/categories" className={styles.backLink}>
+          <ArrowLeft size={16} /> Back to Categories
         </Link>
       </div>
 
@@ -70,14 +99,12 @@ const ProductDetail = () => {
         {/* Left Column: Image Card */}
         <div className={styles.imageColumn}>
           <div className={styles.imageCard}>
-            <img 
-              src={product.image || '/assets/images/placeholder.svg'} 
-              alt={product.name} 
-              className={styles.image} 
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = '/assets/images/placeholder.svg';
-              }}
+            <OptimizedImage
+              src={product.image}
+              alt={product.name}
+              fallbackType="product"
+              aspectRatio="1/1"
+              objectFit="cover"
             />
             {isOutOfStock && <span className={styles.outOfStockBadge}>Out of Stock</span>}
           </div>
@@ -108,7 +135,9 @@ const ProductDetail = () => {
 
           <div className={styles.priceContainer}>
             <span className={styles.price}>₹{product.price.toFixed(2)}</span>
-            <span className={styles.taxText}>Inclusive of all local taxes</span>
+            <div className={styles.deliveryIndicator}>
+              ⚡ Get it in <strong style={{ color: 'var(--success)' }}>12 mins</strong>
+            </div>
           </div>
 
           <p className={styles.description}>{product.description}</p>
@@ -133,7 +162,7 @@ const ProductDetail = () => {
               className={`btn btn-primary ${styles.addToCartBtn} ${isOutOfStock ? styles.disabledBtn : ''}`}
             >
               <ShoppingCart size={18} />
-              {isOutOfStock ? 'Currently Out of Stock' : 'Add to Shopping Cart'}
+              {isOutOfStock ? 'Currently Out of Stock' : 'Add to Cart'}
             </button>
           </div>
 
@@ -144,29 +173,136 @@ const ProductDetail = () => {
             <div className={styles.trustItem}>
               <Truck size={20} className={styles.trustIcon} />
               <div>
-                <strong>Express Delivery</strong>
-                <span>Guaranteed within 2 hours</span>
+                <strong>Instant Express</strong>
+                <span>Guaranteed fast doorstep drop</span>
               </div>
             </div>
             <div className={styles.trustItem}>
               <RefreshCw size={20} className={styles.trustIcon} />
               <div>
-                <strong>Easy Return Policy</strong>
-                <span>Hassle-free return on delivery</span>
+                <strong>Easy Returns</strong>
+                <span>Instant return/refund on delivery</span>
               </div>
             </div>
             <div className={styles.trustItem}>
               <ShieldCheck size={20} className={styles.trustIcon} />
               <div>
-                <strong>100% Organic Fresh</strong>
-                <span>Directly from organic certified farm partners</span>
+                <strong>100% Quality Checked</strong>
+                <span>Sourced directly from certified partners</span>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Tabs Section */}
+      <section className={styles.tabsSection}>
+        <div className={styles.tabsHeader}>
+          <button 
+            onClick={() => setActiveTab('description')} 
+            className={`${styles.tabBtn} ${activeTab === 'description' ? styles.activeTab : ''}`}
+          >
+            Product Overview
+          </button>
+          <button 
+            onClick={() => setActiveTab('nutrition')} 
+            className={`${styles.tabBtn} ${activeTab === 'nutrition' ? styles.activeTab : ''}`}
+          >
+            Nutritional Facts
+          </button>
+          <button 
+            onClick={() => setActiveTab('reviews')} 
+            className={`${styles.tabBtn} ${activeTab === 'reviews' ? styles.activeTab : ''}`}
+          >
+            Customer Reviews
+          </button>
+        </div>
+
+        <div className={styles.tabContent}>
+          {activeTab === 'description' && (
+            <div className={styles.tabPane}>
+              <h3>Product Description</h3>
+              <p>{product.description}</p>
+              <p style={{ marginTop: '1rem' }}>
+                All our items are packaged with food-safe material and handled in clean, sanitized conditions. Store in a cool, dry place to maintain shelf-life.
+              </p>
+            </div>
+          )}
+
+          {activeTab === 'nutrition' && (
+            <div className={styles.tabPane}>
+              <h3>Nutritional Details (Approx per 100g)</h3>
+              <table className={styles.nutritionTable}>
+                <tbody>
+                  <tr>
+                    <td><strong>Energy</strong></td>
+                    <td>{nutrition.cal}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Total Fat</strong></td>
+                    <td>{nutrition.fat}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Carbohydrates</strong></td>
+                    <td>{nutrition.carbs}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Dietary Fiber</strong></td>
+                    <td>{nutrition.fiber}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Proteins</strong></td>
+                    <td>{nutrition.protein}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {activeTab === 'reviews' && (
+            <div className={styles.tabPane}>
+              <h3>Customer Reviews ({product.reviewsCount})</h3>
+              <div className={styles.reviewsList}>
+                <div className={styles.reviewItem}>
+                  <div className={styles.reviewStars}>
+                    {[...Array(5)].map((_, i) => <Star key={i} size={12} fill="var(--secondary)" color="var(--secondary)" />)}
+                  </div>
+                  <strong>Perfect Quality!</strong>
+                  <p>Extremely fresh and delivered in less than 10 mins. Very impressed with the speed!</p>
+                  <span>- Rajesh Kumar (Verified Buyer)</span>
+                </div>
+                
+                <div className={styles.reviewItem}>
+                  <div className={styles.reviewStars}>
+                    {[...Array(4)].map((_, i) => <Star key={i} size={12} fill="var(--secondary)" color="var(--secondary)" />)}
+                  </div>
+                  <strong>Value for money</strong>
+                  <p>Clean packaging, good weight. Will definitely purchase again next week.</p>
+                  <span>- Seema Rao (Verified Buyer)</span>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Related Products Carousel */}
+      {relatedItems.length > 0 && (
+        <section className={styles.relatedSection}>
+          <div className={styles.relatedHeader}>
+            <Sparkles size={18} className={styles.relatedIcon} />
+            <h2>You Might Also Like</h2>
+          </div>
+          <div className={styles.relatedGrid}>
+            {relatedItems.map(item => (
+              <ProductCard key={item.id} product={item} />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 };
 
 export default ProductDetail;
+
