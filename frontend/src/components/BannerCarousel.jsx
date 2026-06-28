@@ -13,7 +13,7 @@ const BannerCarousel = () => {
       btnText: 'Shop Produce',
       btnLink: '/categories?category=fruits-vegetables',
       code: 'FRESHVEC20',
-      image: 'https://images.unsplash.com/photo-1610832958506-c5693b474026?w=1000&auto=format&fit=crop&q=80'
+      image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=1000&auto=format&fit=crop&q=80'
     },
     {
       id: 2,
