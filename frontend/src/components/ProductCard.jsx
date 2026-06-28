@@ -37,6 +37,7 @@ const ProductCard = ({ product }) => {
         <OptimizedImage 
           src={product.image} 
           alt={product.name} 
+          className={styles.cardImage}
           fallbackType="product"
           zoomOnHover={true}
           aspectRatio="1/1"

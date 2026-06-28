@@ -102,6 +102,7 @@ const ProductDetail = () => {
             <OptimizedImage
               src={product.image}
               alt={product.name}
+              className={styles.detailImage}
               fallbackType="product"
               aspectRatio="1/1"
               objectFit="cover"

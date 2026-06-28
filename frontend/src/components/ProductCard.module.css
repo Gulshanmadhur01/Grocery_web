@@ -55,25 +55,23 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding-top: 75%; /* 4:3 ratio */
-  position: relative;
+  padding: 1.25rem 1.25rem 0.5rem; /* Padding to make image smaller */
+  box-sizing: border-box;
+}
+
+.cardImage {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-tertiary);
   overflow: hidden;
-  background-color: white;
+  width: 100%;
+  transition: var(--transition);
 }
 
-.productImage {
-  position: absolute;
-  top: 5%;
-  left: 5%;
-  width: 90%;
-  height: 90%;
-  object-fit: contain;
-  transition: transform 0.5s ease;
+.cardWrapper:hover .cardImage {
+  border-color: var(--primary-hover);
 }
 
-.cardWrapper:hover .productImage {
-  transform: scale(1.05);
-}
 
 /* Details */
 .details {

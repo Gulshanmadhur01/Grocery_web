@@ -53,7 +53,17 @@
   box-shadow: var(--shadow-sm);
   position: relative;
   width: 100%;
+  padding: 2rem; /* padding makes the image smaller */
+  box-sizing: border-box;
 }
+
+.detailImage {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-primary);
+  overflow: hidden;
+}
+
 
 .outOfStockBadge {
   position: absolute;
