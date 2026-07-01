@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { AppContext } from '../context/AppContext';
+import { AppContext, API_BASE_URL } from '../context/AppContext';
 import ProductCard from '../components/ProductCard';
 import OptimizedImage from '../components/OptimizedImage';
 import { Star, ShoppingCart, ArrowLeft, ShieldCheck, Truck, RefreshCw, Sparkles } from 'lucide-react';
@@ -20,7 +20,7 @@ const ProductDetail = () => {
     const fetchProductDetails = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`http://localhost:5000/api/products/${id}`);
+        const res = await fetch(`${API_BASE_URL}/products/${id}`);
         if (!res.ok) throw new Error('Product not found');
         const data = await res.json();
         setProduct(data);

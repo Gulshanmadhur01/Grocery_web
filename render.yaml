@@ -1,0 +1,28 @@
+services:
+  # 1. Express Backend Web Service
+  - type: web
+    name: grocery-backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    rootDir: backend
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+
+  # 2. React (Vite) Frontend Static Site
+  - type: web
+    name: grocery-frontend
+    env: static
+    plan: free
+    buildCommand: npm install && npm run build
+    publishPath: dist
+    rootDir: frontend
+    envVars:
+      - key: VITE_API_URL
+        value: https://grocery-backend-change-me.onrender.com/api
