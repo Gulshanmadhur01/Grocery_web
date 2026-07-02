@@ -252,7 +252,9 @@ router.post('/upload', verifyToken, isAdmin, async (req, res) => {
     const base64Data = data.replace(/^data:image\/\w+;base64,/, "");
     const buffer = Buffer.from(base64Data, 'base64');
 
-    const uploadsDir = path.join(process.cwd(), 'uploads');
+    const uploadsDir = process.env.VERCEL
+      ? path.join('/tmp', 'uploads')
+      : path.join(__dirname, '..', 'uploads');
     // Ensure uploads folder exists
     await fs.mkdir(uploadsDir, { recursive: true });
 
@@ -264,7 +266,7 @@ router.post('/upload', verifyToken, isAdmin, async (req, res) => {
 
     await fs.writeFile(filePath, buffer);
 
-    const imageUrl = `http://localhost:5000/uploads/${uniqueFileName}`;
+    const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${uniqueFileName}`;
 
     res.status(201).json({ message: 'Image uploaded successfully', url: imageUrl });
   } catch (error) {

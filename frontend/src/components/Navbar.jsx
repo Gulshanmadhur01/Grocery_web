@@ -19,10 +19,24 @@ const Navbar = () => {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [searchSuggestions, setSearchSuggestions] = useState([]);
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   
   const navigate = useNavigate();
   const location = useLocation();
   const searchFormRef = useRef();
+
+  // Scroll effect to make header compact and add glassmorphism
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 40) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Sync search input state with global query
   useEffect(() => {
@@ -77,7 +91,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header} ${scrolled ? styles.scrolled : ''}`}>
       {/* 1. Thin Green Top Promo & Location Bar */}
       <div className={styles.topBar}>
         <div className={`${styles.topBarContainer} container`}>
@@ -89,11 +103,6 @@ const Navbar = () => {
               <MapPin size={13} />
               <span>Delivery in <strong className={styles.deliveryTimeText}>12 MINS</strong> to: <strong>{deliveryLocation ? (deliveryLocation.length > 25 ? deliveryLocation.slice(0, 25) + '...' : deliveryLocation) : 'Select Location'}</strong></span>
             </button>
-            <div className={styles.topBarDivider}>|</div>
-            <Link to="/profile" className={styles.topBarLinkItem}>
-              <Truck size={13} />
-              <span>Track Order</span>
-            </Link>
             <div className={styles.topBarDivider}>|</div>
             <div className={styles.topBarLinkItem}>
               <HelpCircle size={13} />

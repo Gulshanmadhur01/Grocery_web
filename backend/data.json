@@ -50,7 +50,7 @@
       "name": "Snacks & Munchies",
       "slug": "snacks",
       "icon": "Cookie",
-      "image": "https://images.unsplash.com/photo-1599490659213-e2b9527b0876?w=600&auto=format&fit=crop&q=80"
+      "image": "https://images.unsplash.com/photo-1599491888253-24b39a16f3c9?w=600&auto=format&fit=crop&q=80"
     },
     {
       "id": "cat-7",
@@ -99,14 +99,14 @@
       "name": "Masala, Oil & More",
       "slug": "masala-oil-more",
       "icon": "MortarPestle",
-      "image": "https://images.unsplash.com/photo-1596790011462-8408f657a82b?w=600&auto=format&fit=crop&q=80"
+      "image": "https://images.unsplash.com/photo-1606791405792-1004f1718d0c?w=600&auto=format&fit=crop&q=80"
     },
     {
       "id": "cat-14",
       "name": "Sauces & Spreads",
       "slug": "sauces-spreads",
       "icon": "GlassWater",
-      "image": "https://images.unsplash.com/photo-1471253730640-6614e7127b3b?w=600&auto=format&fit=crop&q=80"
+      "image": "https://images.unsplash.com/photo-1585238342024-78d387f4a707?w=600&auto=format&fit=crop&q=80"
     },
     {
       "id": "cat-15",
@@ -120,7 +120,7 @@
       "name": "Baby Care",
       "slug": "baby-care",
       "icon": "Baby",
-      "image": "https://images.unsplash.com/photo-1519689680058-324335c77ebe?w=600&auto=format&fit=crop&q=80"
+      "image": "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=600&auto=format&fit=crop&q=80"
     },
     {
       "id": "cat-17",
@@ -458,7 +458,7 @@
       "price": 45,
       "unit": "200g",
       "category": "snacks",
-      "image": "https://images.unsplash.com/photo-1599490659213-e2b9527b0876?w=600&auto=format&fit=crop&q=80",
+      "image": "https://images.unsplash.com/photo-1599508704512-2f19efd1e35f?w=600&auto=format&fit=crop&q=80",
       "stock": 40,
       "rating": 4.5,
       "reviewsCount": 75,
@@ -640,7 +640,7 @@
       "price": 65,
       "unit": "100g",
       "category": "masala-oil-more",
-      "image": "https://images.unsplash.com/photo-1596790011462-8408f657a82b?w=600&auto=format&fit=crop&q=80",
+      "image": "https://images.unsplash.com/photo-1532336414038-cf19250c5757?w=600&auto=format&fit=crop&q=80",
       "stock": 50,
       "rating": 4.8,
       "reviewsCount": 73,
@@ -705,7 +705,7 @@
       "price": 499,
       "unit": "32pcs",
       "category": "baby-care",
-      "image": "https://images.unsplash.com/photo-1519689680058-324335c77ebe?w=600&auto=format&fit=crop&q=80",
+      "image": "https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=600&auto=format&fit=crop&q=80",
       "stock": 20,
       "rating": 4.8,
       "reviewsCount": 110,

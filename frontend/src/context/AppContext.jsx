@@ -10,6 +10,10 @@ export const AppProvider = ({ children }) => {
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   });
 
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+  };
+
   // User auth state
   const [token, setToken] = useState(() => {
     return localStorage.getItem('token') || null;
@@ -473,7 +477,7 @@ export const AppProvider = ({ children }) => {
 
   return (
     <AppContext.Provider value={{
-      theme,
+      theme, toggleTheme,
       token, user, login, register, logout,
       products, categories, loading, error, fetchProducts, fetchCategories,
       createCategory, updateCategory, deleteCategory, uploadImage,

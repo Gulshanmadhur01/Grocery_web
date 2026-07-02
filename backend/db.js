@@ -5,7 +5,9 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const dbPath = path.join(__dirname, 'data.json');
+const dbPath = process.env.VERCEL
+  ? path.join('/tmp', 'data.json')
+  : path.join(__dirname, 'data.json');
 
 // Lock to prevent concurrent write collisions
 let writePromise = Promise.resolve();
@@ -226,14 +228,25 @@ async function initDb() {
     await fs.access(dbPath);
   } catch (error) {
     // If db file doesn't exist, create it with seed data
-    await fs.writeFile(dbPath, JSON.stringify(initialData, null, 2), 'utf-8');
+    if (process.env.VERCEL) {
+      const originalPath = path.join(__dirname, 'data.json');
+      const originalContent = await fs.readFile(originalPath, 'utf-8');
+      await fs.writeFile(dbPath, originalContent, 'utf-8');
+    } else {
+      await fs.writeFile(dbPath, JSON.stringify(initialData, null, 2), 'utf-8');
+    }
   }
 }
 
 export async function readDb() {
   await initDb();
   const fileContent = await fs.readFile(dbPath, 'utf-8');
-  return JSON.parse(fileContent);
+  const db = JSON.parse(fileContent);
+  if (!db.users) db.users = [];
+  if (!db.categories) db.categories = [];
+  if (!db.products) db.products = [];
+  if (!db.orders) db.orders = [];
+  return db;
 }
 
 export async function writeDb(data) {

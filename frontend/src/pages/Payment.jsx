@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
-import { ArrowLeft, Landmark, CreditCard, Smartphone, Coins, CheckCircle, MapPin, Truck } from 'lucide-react';
-import styles from './Checkout.module.css'; // Reuse Checkout module CSS directly!
+import { ArrowLeft, Landmark, CreditCard, Smartphone, Coins, CheckCircle, MapPin, Truck, ShieldCheck } from 'lucide-react';
+import styles from './Payment.module.css';
 
 // Helper to dynamically load external scripts (Razorpay SDK)
 const loadScript = (src) => {
@@ -366,6 +366,12 @@ const Payment = () => {
                 </p>
               </div>
             )}
+
+            {/* Security Badge */}
+            <div className={styles.securityBadge}>
+              <ShieldCheck size={16} className={styles.securityIcon} />
+              <span>SSL Secure & 100% Encrypted Connection</span>
+            </div>
           </div>
         </div>
 
