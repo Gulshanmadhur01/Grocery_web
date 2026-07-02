@@ -201,6 +201,20 @@ const Checkout = () => {
             </button>
           </div>
         </div>
+
+        {/* Sticky Mobile Bottom Bar */}
+        <div className={styles.mobileBottomBar}>
+          <div className={styles.mobileBottomInfo}>
+            <span className={styles.mobileBottomLabel}>Total Price</span>
+            <span className={styles.mobileBottomPrice}>₹{grandTotal.toFixed(2)}</span>
+          </div>
+          <button 
+            type="submit" 
+            className={`btn btn-primary ${styles.mobileBottomBtn}`}
+          >
+            Proceed to Payment
+          </button>
+        </div>
       </form>
     </div>
   );

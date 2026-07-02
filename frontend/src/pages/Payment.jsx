@@ -418,6 +418,21 @@ const Payment = () => {
             </button>
           </div>
         </div>
+
+        {/* Sticky Mobile Bottom Bar */}
+        <div className={styles.mobileBottomBar}>
+          <div className={styles.mobileBottomInfo}>
+            <span className={styles.mobileBottomLabel}>Total Price</span>
+            <span className={styles.mobileBottomPrice}>₹{grandTotal.toFixed(2)}</span>
+          </div>
+          <button 
+            type="submit" 
+            disabled={loading}
+            className={`btn btn-primary ${styles.mobileBottomBtn}`}
+          >
+            {loading ? 'Processing...' : paymentMethod === 'cod' ? 'Place Order (COD)' : 'Pay Now'}
+          </button>
+        </div>
       </form>
     </div>
   );

@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 
 import LocationModal from './components/LocationModal';
 import CartDrawer from './components/CartDrawer';
+import ScrollToTop from './components/ScrollToTop';
 
 // Pages
 import Home from './pages/Home';
@@ -24,6 +25,7 @@ function App() {
   return (
     <AppProvider>
       <Router>
+        <ScrollToTop />
         <LocationModal />
         <CartDrawer />
         <div className="app-container">

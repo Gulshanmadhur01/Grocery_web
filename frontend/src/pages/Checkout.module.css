@@ -338,6 +338,59 @@
   }
 }
 
+.mobileBottomBar {
+  display: none;
+}
+
+@media (max-width: 992px) {
+  .layout {
+    padding-bottom: 8rem;
+  }
+  
+  .mobileBottomBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--bg-secondary);
+    border-top: 1px solid var(--border);
+    padding: 1.25rem 1.75rem;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.08);
+    z-index: 1000;
+  }
+
+  .mobileBottomInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .mobileBottomLabel {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .mobileBottomPrice {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary);
+    font-family: var(--font-heading);
+  }
+
+  .mobileBottomBtn {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-radius: var(--radius-md);
+  }
+}
+
 .paymentTabs {
   display: flex;
   gap: 1.25rem;
