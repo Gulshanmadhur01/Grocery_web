@@ -4,7 +4,9 @@
   "description": "Full-stack Grocery Web Application",
   "scripts": {
     "install:all": "npm install && npm install --prefix backend && npm install --prefix frontend",
-    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\""
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
+    "postinstall": "npm install --prefix backend",
+    "start": "node backend/server.js"
   },
   "dependencies": {
     "concurrently": "^8.2.2"
