@@ -124,7 +124,7 @@ const Profile = () => {
                     value={authData.name} 
                     onChange={handleInputChange}
                     className="form-control" 
-                    placeholder="John Doe"
+                    placeholder="Rahul Sharma"
                   />
                 </div>
               </div>
@@ -140,7 +140,7 @@ const Profile = () => {
                   value={authData.email} 
                   onChange={handleInputChange}
                   className="form-control" 
-                  placeholder="name@example.com"
+                  placeholder="rahul@gmail.com"
                 />
               </div>
             </div>

@@ -99,7 +99,7 @@ const Checkout = () => {
                 value={checkoutAddress.fullName} 
                 onChange={handleInputChange}
                 className="form-control"
-                placeholder="e.g. John Doe"
+                placeholder="e.g. Rahul Sharma"
               />
               {formErrors.fullName && <span className={styles.errMessage}>{formErrors.fullName}</span>}
             </div>
@@ -113,7 +113,7 @@ const Checkout = () => {
                   value={checkoutAddress.phone} 
                   onChange={handleInputChange}
                   className="form-control"
-                  placeholder="e.g. +1 555-019-2834"
+                  placeholder="e.g. +91 98765 43210"
                 />
                 {formErrors.phone && <span className={styles.errMessage}>{formErrors.phone}</span>}
               </div>
@@ -125,7 +125,7 @@ const Checkout = () => {
                   value={checkoutAddress.zipCode} 
                   onChange={handleInputChange}
                   className="form-control"
-                  placeholder="10001"
+                  placeholder="e.g. 110001"
                 />
                 {formErrors.zipCode && <span className={styles.errMessage}>{formErrors.zipCode}</span>}
               </div>
@@ -139,7 +139,7 @@ const Checkout = () => {
                 value={checkoutAddress.streetAddress} 
                 onChange={handleInputChange}
                 className="form-control"
-                placeholder="Apartment, Street Name, Block"
+                placeholder="e.g. H-Block, Sector 62, Landmark"
               />
               {formErrors.streetAddress && <span className={styles.errMessage}>{formErrors.streetAddress}</span>}
             </div>
@@ -152,7 +152,7 @@ const Checkout = () => {
                 value={checkoutAddress.city} 
                 onChange={handleInputChange}
                 className="form-control"
-                placeholder="e.g. New York"
+                placeholder="e.g. Noida / New Delhi"
               />
               {formErrors.city && <span className={styles.errMessage}>{formErrors.city}</span>}
             </div>
